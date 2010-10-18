@@ -23,7 +23,10 @@ def render_common(template_name, obj, filename, version):
     return template.loader.render_to_string(template_name, context)
 
 def render_css(css, filename, version=None):
-    return render_common(css.get('template_name', 'compress/css.html'), css, filename, version)
+    if filename.endswith('.less'):
+        return render_common(css.get('template_name', 'compress/less.html'), css, filename, version)
+    else:
+        return render_common(css.get('template_name', 'compress/css.html'), css, filename, version)
 
 def render_js(js, filename, version=None):
     return render_common(js.get('template_name', 'compress/js.html'), js, filename, version)
@@ -122,3 +125,8 @@ def compressed_js(parser, token):
 
     return CompressedJSNode(name)
 compressed_js = register.tag(compressed_js)
+
+#@register.tag
+def less_js():
+    return '<script src="http://lesscss.googlecode.com/files/less-1.0.35.min.js"></script>'
+less_js = register.tag(less_js)

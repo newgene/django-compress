@@ -126,7 +126,11 @@ def compressed_js(parser, token):
     return CompressedJSNode(name)
 compressed_js = register.tag(compressed_js)
 
-#@register.tag
-def less_js():
-    return '<script src="http://lesscss.googlecode.com/files/less-1.0.35.min.js"></script>'
-less_js = register.tag(less_js)
+@register.simple_tag
+def include_less_js():
+    return '''<script src="http://lesscss.googlecode.com/files/less-1.0.41.min.js"></script>
+        <script type="text/javascript">
+            less.env = "development";
+            // less.watch();
+        </script>
+    '''

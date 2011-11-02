@@ -1,6 +1,6 @@
 import os
 
-from compress.utils import get_output_filename, compress_source, compress_root
+from compress.utils import get_output_filename, compress_root
 from compress.versioning.base import VersioningBase
 
 class MTimeVersioning(VersioningBase):
@@ -8,8 +8,7 @@ class MTimeVersioning(VersioningBase):
     def get_version(self, source_files):
 
         # Return the modification time for the newest source file
-        return str(max(
-                [int(os.stat(compress_source(f)).st_mtime) for f in source_files]))
+        return str(max([int(os.stat(compress_root(f)).st_mtime) for f in source_files]))
 
     def needs_update(self, output_file, source_files, version):
 

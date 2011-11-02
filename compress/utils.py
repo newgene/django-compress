@@ -136,6 +136,17 @@ def filter_common(obj, verbosity, filters, attr, separator, signal):
     signal.send(None)
 
 def filter_css(css, verbosity=0):
+    ### Begin modifications
+    # The code below was added by Marc Leglise on Feb 3, 2011
+    # It catches LESS stylesheets and compiles them to CSS before being passed
+    # on to the normal Django-Compress routines.
+    from compress.less import compile_less
+    for i,filename in enumerate(css['source_filenames']):
+        if filename.endswith('.less'):
+            outfile = filename.replace('.less','_tmp.css')
+            compile_less(filename, outfile)
+            css['source_filenames'][i] = outfile
+    ### End modifications
     return filter_common(css, verbosity, filters=settings.COMPRESS_CSS_FILTERS, attr='filter_css', separator='', signal=css_filtered)
 
 def filter_js(js, verbosity=0):
